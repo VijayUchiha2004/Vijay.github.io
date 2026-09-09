@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vijay Sumanth — Full Stack Web Developer</title>
 <meta name="description" content="Portfolio of Vijay Sumanth — Full Stack Web Developer, AI & Blockchain enthusiast based in Hyderabad, India.">
+
+<meta property="og:title" content="Vijay Sumanth — Full Stack Web Developer">
+<meta property="og:description" content="Full stack web developer with an active interest in AI and blockchain, based in Hyderabad, India.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0e1a'/%3E%3Cpath d='M16 7l1.8 5.6L23 15l-5.2 2.4L16 23l-1.8-5.6L9 15l5.2-2.4z' fill='%237c9eff'/%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -53,6 +61,64 @@
     letter-spacing:0.01em;
   }
 
+  .skip-link{
+    position:absolute;
+    top:-48px;
+    left:24px;
+    background:var(--accent-warm);
+    color:#10162b;
+    padding:10px 16px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem;
+    border-radius:3px;
+    z-index:100;
+    transition:top .15s ease;
+  }
+  .skip-link:focus{top:16px;}
+
+  /* ---------- Sticky nav ---------- */
+  #topnav{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:40;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 24px;
+    background:rgba(10,14,26,0.72);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;
+    transform:translateY(-100%);
+    transition:transform .3s ease, border-color .3s ease;
+  }
+  #topnav.visible{transform:translateY(0); border-bottom-color:var(--hairline);}
+  #topnav .nav-inner{
+    max-width:var(--max-w);
+    margin:0 auto;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  #topnav .nav-name{
+    font-family:'Fraunces', serif;
+    font-size:1rem;
+    color:var(--text);
+  }
+  #topnav ul{list-style:none; display:flex; gap:22px; margin:0; padding:0;}
+  #topnav a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.8rem;
+    color:var(--text-muted);
+    border-bottom:1px solid transparent;
+    padding-bottom:2px;
+  }
+  #topnav a.active, #topnav a:hover{color:var(--text); border-bottom-color:var(--accent);}
+  @media (max-width:560px){
+    #topnav ul{gap:14px;}
+    #topnav .nav-name{display:none;}
+  }
+
   /* ---------- Hero ---------- */
   #hero{
     position:relative;
@@ -72,6 +138,7 @@
   .hero-name{
     font-size:clamp(2.6rem, 7vw, 4.4rem);
     line-height:1.05;
+    will-change:transform;
   }
   .hero-name em{font-style:italic; color:var(--accent);}
   .hero-role{
@@ -95,9 +162,12 @@
   }
   .hero-links a:hover{color:var(--accent); border-bottom-color:var(--accent);}
 
-  /* ---------- Sections ---------- */
+  /* ---------- Sections & scroll reveal ---------- */
   section{padding:64px 0;}
   section + section{border-top:1px solid var(--hairline);}
+
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
 
   .section-head{
     display:flex;
@@ -114,6 +184,17 @@
   #about p{margin:0 0 16px; max-width:600px;}
   #about p:last-child{margin-bottom:0;}
 
+  .now-line{
+    margin-top:22px;
+    padding:14px 16px;
+    border-left:2px solid var(--accent);
+    background:var(--bg-panel);
+    color:var(--text-muted);
+    font-size:0.92rem;
+    max-width:560px;
+  }
+  .now-line strong{color:var(--text); font-weight:500;}
+
   .skills{
     margin-top:28px;
     display:flex;
@@ -127,7 +208,9 @@
     border:1px solid var(--hairline);
     padding:5px 11px;
     border-radius:3px;
+    transition:border-color .15s ease, color .15s ease;
   }
+  .skill:hover{border-color:var(--accent); color:var(--text);}
 
   /* ---------- Entry list (projects / certs) ---------- */
   .entry-list{border-top:1px solid var(--hairline);}
@@ -137,16 +220,26 @@
     display:grid;
     grid-template-columns:88px 1fr;
     gap:20px;
+    transition:padding-left .2s ease;
   }
+  .entry:hover, .entry:focus-within{padding-left:8px;}
   .entry-meta{padding-top:4px;}
   .entry h3{font-size:1.15rem; margin-bottom:8px;}
   .entry p{margin:0 0 12px; color:var(--text-muted); max-width:520px;}
+  .entry ul.impact{
+    margin:0 0 12px;
+    padding-left:18px;
+    color:var(--text-muted);
+    max-width:520px;
+  }
+  .entry ul.impact li{margin-bottom:4px;}
   .entry-links{display:flex; gap:16px; flex-wrap:wrap;}
   .entry-links a{font-family:'IBM Plex Mono', monospace; font-size:0.8rem;}
   .entry-tags{margin-top:10px; color:var(--text-muted); font-size:0.85rem;}
 
   @media (max-width:520px){
     .entry{grid-template-columns:1fr; gap:6px;}
+    .entry:hover, .entry:focus-within{padding-left:0;}
   }
 
   /* ---------- Publication ---------- */
@@ -154,7 +247,9 @@
   #publication cite{font-style:normal; color:var(--text);}
 
   /* ---------- Contact ---------- */
-  #contact{padding-bottom:96px;}
+  #contact{position:relative; padding-bottom:96px; overflow:hidden;}
+  #contact-constellation{position:absolute; top:0; right:-40px; width:280px; height:280px; opacity:0.5; pointer-events:none;}
+  #contact .wrap{position:relative; z-index:1;}
   #contact h2{font-size:2rem; max-width:480px;}
   .contact-list{
     margin-top:32px;
@@ -167,6 +262,18 @@
     font-size:0.95rem;
     display:inline-block;
   }
+  .resume-btn{
+    margin-top:30px;
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem;
+    color:var(--bg);
+    background:var(--accent-warm);
+    padding:11px 20px;
+    border-radius:3px;
+    border-bottom:none;
+  }
+  .resume-btn:hover{opacity:0.88; border-bottom:none;}
 
   footer{
     padding:28px 0 48px;
@@ -175,18 +282,58 @@
     font-family:'IBM Plex Mono', monospace;
   }
 
+  /* ---------- Back to top ---------- */
+  #top-btn{
+    position:fixed;
+    right:24px;
+    bottom:24px;
+    z-index:40;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:1px solid var(--hairline);
+    background:rgba(16,22,43,0.85);
+    backdrop-filter:blur(6px);
+    color:var(--text-muted);
+    font-family:'IBM Plex Mono', monospace;
+    cursor:pointer;
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(8px);
+    transition:opacity .25s ease, transform .25s ease, color .15s ease, border-color .15s ease;
+  }
+  #top-btn.visible{opacity:1; pointer-events:auto; transform:translateY(0);}
+  #top-btn:hover{color:var(--text); border-color:var(--accent);}
+
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
+    .reveal{opacity:1; transform:none; transition:none;}
+    .hero-name{transform:none !important;}
   }
 </style>
 </head>
 <body>
 
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav id="topnav" aria-label="Section navigation">
+  <div class="nav-inner">
+    <span class="nav-name">Vijay Sumanth</span>
+    <ul>
+      <li><a href="#about" data-nav="about">About</a></li>
+      <li><a href="#projects" data-nav="projects">Projects</a></li>
+      <li><a href="#certifications" data-nav="certifications">Certifications</a></li>
+      <li><a href="#publication" data-nav="publication">Publication</a></li>
+      <li><a href="#contact" data-nav="contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
 <section id="hero">
   <canvas id="stars"></canvas>
   <div class="wrap hero-inner">
     <div class="hero-eyebrow mono">Hyderabad, India</div>
-    <h1 class="hero-name">Vijay Sumanth<br><em>builds for the web.</em></h1>
+    <h1 class="hero-name" id="hero-name">Vijay Sumanth<br><em>builds for the web.</em></h1>
     <p class="hero-role">Full stack web developer with an active interest in AI and blockchain — I build products end to end, from data pipelines to the interface people actually touch.</p>
     <nav class="hero-links">
       <a href="#projects">Projects</a>
@@ -197,11 +344,14 @@
   </div>
 </section>
 
+<main id="main">
+
 <section id="about">
-  <div class="wrap">
+  <div class="wrap reveal">
     <div class="section-head"><h2>About</h2></div>
     <p>I'm a Computer Science graduate (B.Tech, Joginpally B.R. Engineering College, JNTUH) based in Hyderabad, currently splitting my time between shipping full-stack projects and going deep on AI-driven products. I like working across the whole stack — from a Flask API serving a machine learning model to the React interface someone actually opens.</p>
     <p>Lately that's meant building tools that combine practical engineering with applied ML: a regional healthcare assistant that predicts disease risk, a crop disease classifier, and a few developer-facing utilities along the way.</p>
+    <div class="now-line"><strong>Right now:</strong> sharpening C++ and DSA for interviews, and building out core CS fundamentals toward a master's degree or the job market.</div>
     <div class="skills">
       <span class="skill">C++</span>
       <span class="skill">Python</span>
@@ -219,7 +369,7 @@
 </section>
 
 <section id="projects">
-  <div class="wrap">
+  <div class="wrap reveal">
     <div class="section-head"><h2>Projects</h2></div>
     <div class="entry-list">
 
@@ -227,7 +377,10 @@
         <div class="entry-meta mono">Featured</div>
         <div>
           <h3>BharatCare</h3>
-          <p>An AI-powered regional healthcare assistant — combines a machine learning disease-prediction model with environmental risk analysis and AI-generated explanations, in multiple languages.</p>
+          <ul class="impact">
+            <li>ML model predicts regional disease risk from health and environmental data</li>
+            <li>AI-generated explanations delivered in multiple languages for accessibility</li>
+          </ul>
           <div class="entry-tags mono">React · TypeScript · Flask · Groq LLaMA</div>
           <div class="entry-links">
             <a href="https://github.com/VijayUchiha2004/bharat-health-guide">GitHub</a>
@@ -239,7 +392,10 @@
         <div class="entry-meta mono">Security</div>
         <div>
           <h3>Secure Password Manager</h3>
-          <p>A password manager with encrypted storage and a MySQL-backed API for managing credentials safely.</p>
+          <ul class="impact">
+            <li>Encrypted credential storage backed by a MySQL API</li>
+            <li>Deployed and running live via Render</li>
+          </ul>
           <div class="entry-tags mono">Node.js · Express · MySQL</div>
           <div class="entry-links">
             <a href="https://github.com/VijayUchiha2004/secure-password-manager">GitHub</a>
@@ -252,7 +408,10 @@
         <div class="entry-meta mono">ML / Vision</div>
         <div>
           <h3>Crop Disease Detection</h3>
-          <p>An image-based classifier that identifies crop diseases from leaf photos, served through a simple Streamlit interface.</p>
+          <ul class="impact">
+            <li>Image classifier identifies crop diseases from leaf photos</li>
+            <li>Served through a lightweight Streamlit interface</li>
+          </ul>
           <div class="entry-tags mono">TensorFlow · Streamlit</div>
         </div>
       </div>
@@ -261,7 +420,9 @@
         <div class="entry-meta mono">AI / Finance</div>
         <div>
           <h3>Finance Tracker</h3>
-          <p>An AI-assisted personal finance tracker for logging and understanding spending patterns.</p>
+          <ul class="impact">
+            <li>AI-assisted logging and categorization of personal spending</li>
+          </ul>
           <div class="entry-tags mono">JavaScript · Python</div>
         </div>
       </div>
@@ -271,7 +432,7 @@
 </section>
 
 <section id="certifications">
-  <div class="wrap">
+  <div class="wrap reveal">
     <div class="section-head"><h2>Certifications</h2></div>
     <div class="entry-list">
 
@@ -312,7 +473,7 @@
 </section>
 
 <section id="publication">
-  <div class="wrap">
+  <div class="wrap reveal">
     <div class="section-head"><h2>Publication</h2></div>
     <div class="entry-list">
       <div class="entry">
@@ -327,7 +488,32 @@
 </section>
 
 <section id="contact">
-  <div class="wrap">
+  <svg id="contact-constellation" viewBox="0 0 280 280" aria-hidden="true">
+    <g fill="#7c9eff">
+      <circle cx="30" cy="40" r="1.6"/>
+      <circle cx="80" cy="20" r="1.2"/>
+      <circle cx="140" cy="60" r="2"/>
+      <circle cx="190" cy="30" r="1.4"/>
+      <circle cx="230" cy="80" r="1.8"/>
+      <circle cx="110" cy="110" r="1.2"/>
+      <circle cx="60" cy="130" r="1.5"/>
+      <circle cx="200" cy="150" r="1.3"/>
+      <circle cx="250" cy="180" r="1.6"/>
+      <circle cx="150" cy="200" r="1.2"/>
+    </g>
+    <g stroke="#7c9eff" stroke-width="0.6" opacity="0.6">
+      <line x1="30" y1="40" x2="80" y2="20"/>
+      <line x1="80" y1="20" x2="140" y2="60"/>
+      <line x1="140" y1="60" x2="190" y2="30"/>
+      <line x1="190" y1="30" x2="230" y2="80"/>
+      <line x1="140" y1="60" x2="110" y2="110"/>
+      <line x1="110" y1="110" x2="60" y2="130"/>
+      <line x1="230" y1="80" x2="200" y2="150"/>
+      <line x1="200" y1="150" x2="250" y2="180"/>
+      <line x1="200" y1="150" x2="150" y2="200"/>
+    </g>
+  </svg>
+  <div class="wrap reveal">
     <h2>Let's talk.</h2>
     <p class="lede">Open to full-stack and AI-adjacent roles, and happy to hear about interesting projects.</p>
     <div class="contact-list">
@@ -337,21 +523,26 @@
       <a href="https://www.linkedin.com/in/mvijay-sumanth/">linkedin.com/in/mvijay-sumanth</a>
       <a href="https://leetcode.com/u/mvijaysumanth/">leetcode.com/u/mvijaysumanth</a>
     </div>
+    <a class="resume-btn" href="resume.pdf" download>Download resume</a>
   </div>
 </section>
+
+</main>
 
 <footer>
   <div class="wrap">© <span id="year"></span> Vijay Sumanth</div>
 </footer>
 
+<button id="top-btn" aria-label="Back to top">↑</button>
+
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Lightweight starfield — draws once, twinkles gently unless reduced motion is requested.
+  // Starfield — draws once, twinkles gently unless reduced motion is requested.
   (function(){
     var canvas = document.getElementById('stars');
     var ctx = canvas.getContext('2d');
-    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var stars = [];
     var w, h;
 
@@ -388,6 +579,78 @@
     window.addEventListener('resize', resize);
     resize();
     draw(0);
+  })();
+
+  // Sticky nav: reveal after leaving hero, highlight active section.
+  (function(){
+    var topnav = document.getElementById('topnav');
+    var hero = document.getElementById('hero');
+    var links = topnav.querySelectorAll('a[data-nav]');
+    var sections = ['about','projects','certifications','publication','contact']
+      .map(function(id){ return document.getElementById(id); });
+
+    var heroObserver = new IntersectionObserver(function(entries){
+      topnav.classList.toggle('visible', !entries[0].isIntersecting);
+    }, { threshold: 0.05 });
+    heroObserver.observe(hero);
+
+    var sectionObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          links.forEach(function(a){
+            a.classList.toggle('active', a.dataset.nav === entry.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    sections.forEach(function(s){ sectionObserver.observe(s); });
+  })();
+
+  // Scroll reveal — each section fades up once as it enters view.
+  (function(){
+    var targets = document.querySelectorAll('.reveal');
+    if (reduceMotion){
+      targets.forEach(function(t){ t.classList.add('in'); });
+      return;
+    }
+    var observer = new IntersectionObserver(function(entries, obs){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('in');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    targets.forEach(function(t){ observer.observe(t); });
+  })();
+
+  // Back-to-top button.
+  (function(){
+    var btn = document.getElementById('top-btn');
+    var hero = document.getElementById('hero');
+    var observer = new IntersectionObserver(function(entries){
+      btn.classList.toggle('visible', !entries[0].isIntersecting);
+    }, { threshold: 0 });
+    observer.observe(hero);
+    btn.addEventListener('click', function(){
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  })();
+
+  // Subtle cursor parallax on the hero name.
+  (function(){
+    if (reduceMotion) return;
+    var name = document.getElementById('hero-name');
+    var hero = document.getElementById('hero');
+    hero.addEventListener('mousemove', function(e){
+      var rect = hero.getBoundingClientRect();
+      var x = (e.clientX - rect.left) / rect.width - 0.5;
+      var y = (e.clientY - rect.top) / rect.height - 0.5;
+      name.style.transform = 'translate(' + (x * -8) + 'px,' + (y * -6) + 'px)';
+    });
+    hero.addEventListener('mouseleave', function(){
+      name.style.transform = 'translate(0,0)';
+    });
   })();
 </script>
 
